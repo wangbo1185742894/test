@@ -10,11 +10,32 @@
 <html>
 <head>
     <title>Title</title>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/scripts/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#lastName").change(function () {
+                var val = $(this).val();
+                val = $.trim(val);
+                $(this).val(val);
+                var url = "${pageContext.request.contextPath}/emps/checkLastName";
+                var arg = {"lastName":val,"date":new Date()};
+                $.post(url,arg,function (date) {
+                    if (date == "1"){
+                        alert("该姓名不可用");
+                    } else if(date == "0"){
+                        alert("该姓名可用");
+                    }else{
+                        alert("网络异常");
+                    }
+                });
+            });
+        })
+    </script>
 </head>
 <body>
 
-    <form:form action="${pageContext}/input" method="post">
-        lastname:<form:input path="lastName"/>
+    <form:form action="${pageContext.request.contextPath}/emps/add" method="post" modelAttribute="employee">
+        lastname:<form:input path="lastName" id="lastName"/>
         <br>
         email:<form:input path="email"/>
         <br>

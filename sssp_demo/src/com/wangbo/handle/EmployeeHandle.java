@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.awt.print.Pageable;
 import java.util.List;
@@ -23,6 +25,13 @@ public class EmployeeHandle {
 
     @Autowired
     private DepartmentService departmentService;
+
+    @RequestMapping(value = "/add" ,method = RequestMethod.POST)
+    public String add(Employee employee){
+        employeeService.save(employee);
+        return "redirect:/emps/list";
+    }
+
     @RequestMapping(value = "/input")
     public String input(Map<String,Object>map){
         map.put("departments",departmentService.getAll());
@@ -54,6 +63,17 @@ public class EmployeeHandle {
         Page<Employee> list =  employeeService.getPage(pageNo,pageSize);
         map .put("employees",list);
         return "list";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/checkLastName")
+    public String checkLastName(@RequestParam(value = "lastName" ,required = true )String lastName){
+        Employee employee = employeeService.checkLastName(lastName);
+        if (employee == null){
+            return "0";
+        }else{
+            return "1";
+        }
     }
 
 
