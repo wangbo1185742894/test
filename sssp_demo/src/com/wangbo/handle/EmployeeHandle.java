@@ -2,6 +2,7 @@ package com.wangbo.handle;
 
 import com.sun.xml.internal.messaging.saaj.packaging.mime.util.LineInputStream;
 import com.wangbo.entity.Employee;
+import com.wangbo.service.DepartmentService;
 import com.wangbo.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,15 @@ public class EmployeeHandle {
 
     @Autowired
     private EmployeeService employeeService;
+
+    @Autowired
+    private DepartmentService departmentService;
+    @RequestMapping(value = "/input")
+    public String input(Map<String,Object>map){
+        map.put("departments",departmentService.getAll());
+        map.put("employee",new Employee());
+        return "input";
+    }
 
     @RequestMapping("/list")
     public String list(@RequestParam(value = "pageNo",required = false,defaultValue = "1")String pageNoStr,

@@ -12,5 +12,7 @@
   </head>
   <body>
   <a href="emps/list">list</a>
+  <br>
+  <a href="emps/input">add</a>
   </body>
 </html>
