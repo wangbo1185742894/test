@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.persistence.Id;
 import java.util.Date;
 
 
@@ -26,12 +27,33 @@ public class EmployeeService  {
 
     @Transactional(readOnly = false)
     public void save(Employee employee){
-        employee.setCreateTime(new Date());
-         employeeRepository.saveAndFlush(employee);
+        if (employee.getId() == null){
+            employee.setCreateTime(new Date());
+        }
+
+        employeeRepository.saveAndFlush(employee);
+
     }
 
     @Transactional(readOnly = false)
     public Employee checkLastName(String lastName){
         return employeeRepository.getByLastName(lastName);
+    }
+
+
+    @Transactional(readOnly = false)
+    public  void delete(Integer id ){
+        employeeRepository.delete(id);
+    }
+
+    @Transactional(readOnly = true)
+    public Employee getEmployeeById(Integer id){
+        return employeeRepository.findOne(id);
+    }
+
+    @Transactional(readOnly = false)
+    public void update(Employee employee){
+
+        employeeRepository.saveAndFlush(employee);
     }
 }

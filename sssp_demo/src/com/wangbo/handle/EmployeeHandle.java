@@ -7,10 +7,7 @@ import com.wangbo.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.awt.print.Pageable;
 import java.util.List;
@@ -25,6 +22,36 @@ public class EmployeeHandle {
 
     @Autowired
     private DepartmentService departmentService;
+
+    @RequestMapping(value = "/delete/{id}")
+    public String delete(@PathVariable("id")Integer id){
+        employeeService.delete(id);
+        return "redirect:/emps/list";
+    }
+
+
+    @ModelAttribute
+    public void getEmployee(@RequestParam(value = "id",required = false)Integer id,Map<String,Object>map){
+        if (id != null){
+            Employee employee = employeeService.getEmployeeById(id);
+            employee.setDepartment(null);
+            map.put("employee",employee  );
+        }
+    }
+
+    @RequestMapping(value = "/edit/{id}",method = RequestMethod.GET)
+    public String edit(@PathVariable("id")Integer id,Map<String,Object>map){
+        map.put("departments",departmentService.getAll());
+        map .put("employee",employeeService.getEmployeeById(id));
+        return "input";
+    }
+
+    @RequestMapping(value = "/add/{id}" ,method = RequestMethod.PUT)
+    public String update(@PathVariable("id")Integer id, Employee employee){
+        employeeService.save(employee);
+        return "redirect:/emps/list";
+    }
+
 
     @RequestMapping(value = "/add" ,method = RequestMethod.POST)
     public String add(Employee employee){

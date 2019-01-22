@@ -1,4 +1,5 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: wangbo
@@ -14,28 +15,47 @@
     <script type="text/javascript">
         $(function () {
             $("#lastName").change(function () {
+
+                var lastname = $("oldName").val();
+                lastname = $.trim(lastname);
                 var val = $(this).val();
                 val = $.trim(val);
                 $(this).val(val);
                 var url = "${pageContext.request.contextPath}/emps/checkLastName";
                 var arg = {"lastName":val,"date":new Date()};
-                $.post(url,arg,function (date) {
-                    if (date == "1"){
-                        alert("该姓名不可用");
-                    } else if(date == "0"){
-                        alert("该姓名可用");
-                    }else{
-                        alert("网络异常");
-                    }
-                });
+                if (val == lastname){
+                    alert("该姓名可用");
+                }else {
+                    $.post(url, arg, function (date) {
+                        if (date == "1") {
+                            alert("该姓名不可用");
+                        } else if (date == "0") {
+                            alert("该姓名可用");
+                        } else {
+                            alert("网络异常");
+                        }
+                    });
+                }
             });
         })
     </script>
 </head>
 <body>
 
-    <form:form action="${pageContext.request.contextPath}/emps/add" method="post" modelAttribute="employee">
+    <c:set value="${pageContext.request.contextPath}/emps/add" var="url"></c:set>
+    <c:if test="${employee.id != null}">
+
+        <c:set value="${pageContext.request.contextPath}/emps/add/${employee.id}" var="url"></c:set>
+    </c:if>
+
+    <form:form action="${url}" method="post" modelAttribute="employee">
         lastname:<form:input path="lastName" id="lastName"/>
+        <c:if test="${employee.id != null}">
+            <input type="hidden" name="oldName" value="${employee.lastName}">
+            <form:hidden path="id"/>
+            <input type="hidden" name="_method" value="PUT">
+        </c:if>
+
         <br>
         email:<form:input path="email"/>
         <br>

@@ -38,8 +38,8 @@
                     <td>${item.email}</td>
                     <td>${item.lastName}</td>
                     <td>${item.department.departmentname}</td>
-                    <td><a href="">±à¼­</a></td>
-                    <td><a href="">É¾³ý</a></td>
+                    <td><a href="${pageContext.request.contextPath}/emps/edit/${item.id}">±à¼­</a></td>
+                    <td><a href="${pageContext.request.contextPath}/emps/delete/${item.id}">É¾³ý</a></td>
                 </tr>
 
 
