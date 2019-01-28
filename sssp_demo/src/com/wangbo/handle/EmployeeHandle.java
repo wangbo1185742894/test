@@ -67,6 +67,7 @@ public class EmployeeHandle {
     }
 
     @RequestMapping("/list")
+    @ResponseBody
     public String list(@RequestParam(value = "pageNo",required = false,defaultValue = "1")String pageNoStr,
                        @RequestParam(value = "pageSize",required = false,defaultValue = "5" )String pageSizeStr,
                         Map<String ,Object> map) {
